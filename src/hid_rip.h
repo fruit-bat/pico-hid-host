@@ -27,7 +27,7 @@
 
 #include "tusb.h"
 #include "hid_ri.h"
-#include "hid.h"
+#include "class/hid/hid.h"
 
 #ifdef __cplusplus
  extern "C" {

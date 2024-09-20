@@ -27,7 +27,6 @@
 #if ((TUSB_OPT_HOST_ENABLED && CFG_TUH_HID) || _UNITY_TEST_)
 
 #include "hid_rip.h"
-#include "hid.h"
 
 void tuh_hid_rip_init_state(tuh_hid_rip_state_t *state, const uint8_t *report, uint16_t length)
 {

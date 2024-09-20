@@ -29,6 +29,7 @@
 
 #include "bsp/board_api.h"
 #include "tusb.h"
+#include "tusb_config.h"
 
 //--------------------------------------------------------------------+
 // MACRO CONSTANT TYPEDEF PROTYPES
@@ -73,6 +74,16 @@ int main(void) {
 //--------------------------------------------------------------------+
 // TinyUSB Callbacks
 //--------------------------------------------------------------------+
+
+void process_kbd_mount(uint8_t dev_addr, uint8_t instance) {
+
+}
+
+void process_kbd_unmount(uint8_t dev_addr, uint8_t instance) {
+
+}
+
+
 
 void tuh_mount_cb(uint8_t dev_addr) {
   // application set-up
