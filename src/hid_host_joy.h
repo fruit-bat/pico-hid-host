@@ -84,17 +84,6 @@ typedef struct {
   uint32_t updated;
 } tusb_hid_simple_joystick_t;
 
-// Fetch some data from the HID parser
-//
-// The data fetched here may be relevant to multiple usage items
-//
-// returns false if obviously not of interest
-bool tuh_hid_joystick_get_data(
-  tuh_hid_rip_state_t *pstate,     // The current HID report parser state
-  const uint8_t* ri_input,         // Pointer to the input item we have arrived at
-  tuh_hid_simple_input_data_t* jdata   // Data structure to complete
-);
-
 // Process the HID descriptor usages
 // These are handled when an 'input' item is encountered.
 void tuh_hid_joystick_process_usages(

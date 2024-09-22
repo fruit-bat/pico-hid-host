@@ -45,7 +45,7 @@ bool tuh_hid_get_simple_input_data(
   
   return true;
 }
-/*
+
 void tuh_hid_process_simple_axis(
   tuh_hid_simple_input_data_t* jdata,
   uint32_t bitpos,
@@ -57,7 +57,7 @@ void tuh_hid_process_simple_axis(
   simple_axis->logical_min = jdata->logical_min;
   simple_axis->logical_max = jdata->logical_max;
 }
-*/
+/*
 void tuh_hid_process_simple_axis(
   tuh_hid_simple_input_data_t* jdata,
   uint32_t bitpos,
@@ -76,3 +76,4 @@ void tuh_hid_process_simple_axis(
     simple_axis->logical_max = jdata->logical_max-quater;
   }
 }
+*/

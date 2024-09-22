@@ -339,7 +339,6 @@ void test_tuh_hid_joystick_get_data(void) {
   TEST_ASSERT_EQUAL(false, simple_joystick->axis_x1.flags.is_signed);
   TEST_ASSERT_EQUAL(0, simple_joystick->axis_x1.logical_min);
   TEST_ASSERT_EQUAL(255, simple_joystick->axis_x1.logical_max);
-
   // y1
   TEST_ASSERT_EQUAL(8, simple_joystick->axis_y1.start);
   TEST_ASSERT_EQUAL(8, simple_joystick->axis_y1.length);
