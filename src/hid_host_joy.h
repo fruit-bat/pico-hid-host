@@ -42,7 +42,9 @@
  extern "C" {
 #endif
 
+#ifndef HID_MAX_JOYSTICKS
 #define HID_MAX_JOYSTICKS 2
+#endif
 
 // Very simple representation of a joystick to try and map to
 // (and this will be quite tricky enough).

@@ -74,7 +74,7 @@ tusb_hid_simple_joystick_t* tuh_hid_allocate_simple_joystick(uint8_t dev_addr, u
     tusb_hid_simple_joystick_t* simple_joystick = &hid_simple_joysticks[i];
     if (!simple_joystick->key.elements.in_use) {
       tu_memclr(simple_joystick, sizeof(tusb_hid_simple_joystick_t));
-      simple_joystick->key.elements.in_use = 1;;
+      simple_joystick->key.elements.in_use = 1;
       simple_joystick->key.elements.instance = instance;
       simple_joystick->key.elements.report_id = report_id;
       simple_joystick->key.elements.dev_addr = dev_addr;

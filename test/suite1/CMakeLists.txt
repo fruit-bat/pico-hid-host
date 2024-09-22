@@ -15,7 +15,8 @@ foreach(target
     )
 
     target_compile_definitions(${target}_tests PRIVATE
-        CFG_TUSB_MCU rp2040
+        CFG_TUSB_MCU=rp2040
+        HID_MAX_JOYSTICKS=4
     )
 
     target_link_libraries(${target}_tests
