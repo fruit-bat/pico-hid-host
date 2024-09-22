@@ -66,6 +66,8 @@ int main(void) {
 
   printf("TinyUSB Host HID joystick/mouse/keyboard Example\r\n");
 
+  tuh_hid_set_default_protocol(HID_PROTOCOL_REPORT);
+
   // init host stack on configured roothub port
   tuh_init(BOARD_TUH_RHPORT);
 
