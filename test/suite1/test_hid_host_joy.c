@@ -302,7 +302,7 @@ void test_simple_joystick_obtain(void) {
   TEST_ASSERT_NOT_NULL(j2);
   TEST_ASSERT_NOT_EQUAL(j1,j2);
 }
-/*
+
 void test_tuh_hid_joystick_get_data(void) {
   tuh_hid_simple_input_data_t joystick_data;
   tuh_hid_rip_state_t pstate;
@@ -312,7 +312,7 @@ void test_tuh_hid_joystick_get_data(void) {
 
   while((ri = tuh_hid_rip_next_item(&pstate)) != NULL ) if (ri >= &tb_speedlink[32]) break;
   TEST_ASSERT_EQUAL(&tb_speedlink[32], ri); // Move to the first input in the speedlink description
-  TEST_ASSERT_EQUAL(true, tuh_hid_joystick_get_data(&pstate, ri, &joystick_data));
+  TEST_ASSERT_EQUAL(true, tuh_hid_get_simple_input_data(&pstate, ri, &joystick_data));
 
   TEST_ASSERT_EQUAL(8, joystick_data.report_size);
   TEST_ASSERT_EQUAL(5, joystick_data.report_count);
@@ -361,7 +361,7 @@ void test_tuh_hid_joystick_get_data(void) {
 
   while((ri = tuh_hid_rip_next_item(&pstate)) != NULL ) if (ri >= &tb_speedlink[47]) break;
   TEST_ASSERT_EQUAL(&tb_speedlink[47], ri); // Move to the second input in the speedlink description
-  TEST_ASSERT_EQUAL(true, tuh_hid_joystick_get_data(&pstate, ri, &joystick_data));
+  TEST_ASSERT_EQUAL(true, tuh_hid_get_simple_input_data(&pstate, ri, &joystick_data));
 
   TEST_ASSERT_EQUAL(4, joystick_data.report_size);
   TEST_ASSERT_EQUAL(1, joystick_data.report_count);
@@ -387,7 +387,7 @@ void test_tuh_hid_joystick_get_data(void) {
 
   while((ri = tuh_hid_rip_next_item(&pstate)) != NULL ) if (ri >= &tb_speedlink[65]) break;
   TEST_ASSERT_EQUAL(&tb_speedlink[65], ri); // Move to the second input in the speedlink description
-  TEST_ASSERT_EQUAL(true, tuh_hid_joystick_get_data(&pstate, ri, &joystick_data));
+  TEST_ASSERT_EQUAL(true, tuh_hid_get_simple_input_data(&pstate, ri, &joystick_data));
 
   TEST_ASSERT_EQUAL(1, joystick_data.report_size);
   TEST_ASSERT_EQUAL(12, joystick_data.report_count);
@@ -415,7 +415,7 @@ void test_tuh_hid_joystick_get_data(void) {
 
   TEST_ASSERT_EQUAL(7, simple_joystick->report_length);
 }
-*/
+
 void test_hid_parse_greenasia_report(void) {
   tuh_hid_joystick_parse_report_descriptor(tb_speedlink, sizeof(tb_speedlink), 5, 9);
   tusb_hid_simple_joystick_t* simple_joystick = tuh_hid_get_simple_joystick(5, 9, 0);
@@ -609,7 +609,7 @@ int main(void)
   RUN_TEST(test_simple_joystick_allocate_too_many);
   RUN_TEST(test_simple_joystick_free_all);
   RUN_TEST(test_simple_joystick_obtain);
-  //RUN_TEST(test_tuh_hid_joystick_get_data);
+  RUN_TEST(test_tuh_hid_joystick_get_data);
   RUN_TEST(test_hid_parse_greenasia_report);
   RUN_TEST(test_hid_parse_speedlink_report);
   RUN_TEST(test_apple_joystick);
