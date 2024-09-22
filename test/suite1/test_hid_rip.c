@@ -27,8 +27,6 @@
 
 // Files to test
 #include "hid_rip.h"
-TEST_FILE("hid_ri.c")
-TEST_FILE("hid_rip.c")
 
 void setUp(void)
 {
@@ -280,7 +278,7 @@ void test_total_size_bits(void)
 
 
 void test_hid_parse_report_descriptor_single_mouse_report(void) {
-  const uint8_t const tb[] = { 
+  const uint8_t  tb[] = { 
     0x05, 0x01,                    // USAGE_PAGE (Generic Desktop)
     0x09, 0x02,                    // USAGE (Mouse)
     0xa1, 0x01,                    // COLLECTION (Application)
@@ -309,9 +307,9 @@ void test_hid_parse_report_descriptor_single_mouse_report(void) {
     0xc0                           // END_COLLECTION
   };
   
-  tuh_hid_report_info_t report_info[3];
+  tuh_hid_report_info_plus_t report_info[3];
 
-  uint8_t report_count = tuh_hid_parse_report_descriptor(report_info, 3, (const uint8_t*)&tb, sizeof(tb));
+  uint8_t report_count = tuh_hid_parse_report_descriptor_plus(report_info, 3, (const uint8_t*)&tb, sizeof(tb));
   TEST_ASSERT_EQUAL(1, report_count);
   TEST_ASSERT_EQUAL(1, report_info[0].usage_page);
   TEST_ASSERT_EQUAL(2, report_info[0].usage);
@@ -321,7 +319,7 @@ void test_hid_parse_report_descriptor_single_mouse_report(void) {
 }
 
 void test_hid_parse_report_descriptor_single_gamepad_report(void) {
-  const uint8_t const tb[] = { 
+  const uint8_t  tb[] = { 
     0x05, 0x01,                    // USAGE_PAGE (Generic Desktop)
     0x09, 0x05,                    // USAGE (Game Pad)
     0xa1, 0x01,                    // COLLECTION (Application)
@@ -350,9 +348,9 @@ void test_hid_parse_report_descriptor_single_gamepad_report(void) {
     0xc0                           // END_COLLECTION
   };
   
-  tuh_hid_report_info_t report_info[3];
+  tuh_hid_report_info_plus_t report_info[3];
 
-  uint8_t report_count = tuh_hid_parse_report_descriptor(report_info, 3, (const uint8_t*)&tb, sizeof(tb));
+  uint8_t report_count = tuh_hid_parse_report_descriptor_plus(report_info, 3, (const uint8_t*)&tb, sizeof(tb));
   TEST_ASSERT_EQUAL(1, report_count);
   TEST_ASSERT_EQUAL(1, report_info[0].usage_page);
   TEST_ASSERT_EQUAL(5, report_info[0].usage);
@@ -362,7 +360,7 @@ void test_hid_parse_report_descriptor_single_gamepad_report(void) {
 }
 
 void test_hid_parse_report_descriptor_dual_report(void) {
-  const uint8_t const tb[] = { 
+  const uint8_t  tb[] = { 
     0x09, 0x01,        // Usage (Consumer Control)
     0xA1, 0x01,        // Collection (Application)
 
@@ -387,9 +385,9 @@ void test_hid_parse_report_descriptor_dual_report(void) {
     0xC0,              // End Collection
   };
   
-  tuh_hid_report_info_t report_info[3];
+  tuh_hid_report_info_plus_t report_info[3];
 
-  uint8_t report_count = tuh_hid_parse_report_descriptor(report_info, 3, (const uint8_t*)&tb, sizeof(tb));
+  uint8_t report_count = tuh_hid_parse_report_descriptor_plus(report_info, 3, (const uint8_t*)&tb, sizeof(tb));
   TEST_ASSERT_EQUAL(2, report_count);
   TEST_ASSERT_EQUAL(0, report_info[0].usage_page);
   TEST_ASSERT_EQUAL(1, report_info[0].usage);
@@ -404,7 +402,7 @@ void test_hid_parse_report_descriptor_dual_report(void) {
 }
 
 void test_hid_parse_report_descriptor_joystick_report(void) {
-  const uint8_t const tb[] = { 
+  const uint8_t  tb[] = { 
     0x05, 0x01,        // Usage Page (Generic Desktop Ctrls)
     0x09, 0x04,        // Usage (Joystick)
     0xA1, 0x01,        // Collection (Application)
@@ -459,9 +457,9 @@ void test_hid_parse_report_descriptor_joystick_report(void) {
     0xC0,              //   End Collection
     0xC0,              // End Collection
   };
-  tuh_hid_report_info_t report_info[3];
+  tuh_hid_report_info_plus_t report_info[3];
 
-  uint8_t report_count = tuh_hid_parse_report_descriptor(report_info, 3, (const uint8_t*)&tb, sizeof(tb));
+  uint8_t report_count = tuh_hid_parse_report_descriptor_plus(report_info, 3, (const uint8_t*)&tb, sizeof(tb));
   TEST_ASSERT_EQUAL(1, report_count);
   TEST_ASSERT_EQUAL(1, report_info[0].usage_page);
   TEST_ASSERT_EQUAL(4, report_info[0].usage);
@@ -471,7 +469,7 @@ void test_hid_parse_report_descriptor_joystick_report(void) {
 }
 
 void test_hid_parse_greenasia_report(void) {
-  const uint8_t const tb[] = { 
+  const uint8_t tb[] = { 
     0x05, 0x01,        // Usage Page (Generic Desktop Ctrls)
     0x09, 0x04,        // Usage (Joystick)
     0xA1, 0x01,        // Collection (Application)
@@ -522,14 +520,14 @@ void test_hid_parse_greenasia_report(void) {
     0xC0,              //   End Collection
     0xC0,              // End Collection
   };
-  tuh_hid_report_info_t report_info[3];
+  tuh_hid_report_info_plus_t report_info[3];
 
-  uint8_t report_count = tuh_hid_parse_report_descriptor(report_info, 3, (const uint8_t*)&tb, sizeof(tb));
+  uint8_t report_count = tuh_hid_parse_report_descriptor_plus(report_info, 3, (const uint8_t*)&tb, sizeof(tb));
   TEST_ASSERT_EQUAL(1, report_count);
 }
 
 void test_hid_parse_speedlink_report(void) {
-  const uint8_t const tb[] = { 
+  const uint8_t tb[] = { 
     0x05, 0x01,        // Usage Page (Generic Desktop Ctrls)
     0x09, 0x04,        // Usage (Joystick)
     0xA1, 0x01,        // Collection (Application)
@@ -580,14 +578,14 @@ void test_hid_parse_speedlink_report(void) {
     0xC0,              //   End Collection
     0xC0,              // End Collection
   };
-  tuh_hid_report_info_t report_info[3];
+  tuh_hid_report_info_plus_t report_info[3];
 
-  uint8_t report_count = tuh_hid_parse_report_descriptor(report_info, 3, (const uint8_t*)&tb, sizeof(tb));
+  uint8_t report_count = tuh_hid_parse_report_descriptor_plus(report_info, 3, (const uint8_t*)&tb, sizeof(tb));
   TEST_ASSERT_EQUAL(1, report_count);
 }
 
 void test_hid_parse_keyboard_and_trackpad_report(void) {
-  const uint8_t const tb[] = { 
+  const uint8_t  tb[] = { 
     0x05, 0x01,        // Usage Page (Generic Desktop Ctrls)
     0x09, 0x02,        // Usage (Mouse)
     0xA1, 0x01,        // Collection (Application)
@@ -662,18 +660,18 @@ void test_hid_parse_keyboard_and_trackpad_report(void) {
     0x81, 0x00,        //   Input (Data,Array,Abs,No Wrap,Linear,Preferred State,No Null Position)
     0xC0,              // End Collection
   };
-  tuh_hid_report_info_t report_info[5];
+  tuh_hid_report_info_plus_t report_info[5];
 
   uint8_t report_count;
-  report_count = tuh_hid_parse_report_descriptor(report_info, 1, (const uint8_t*)&tb, sizeof(tb));
+  report_count = tuh_hid_parse_report_descriptor_plus(report_info, 1, (const uint8_t*)&tb, sizeof(tb));
   TEST_ASSERT_EQUAL(1, report_count);
-  report_count = tuh_hid_parse_report_descriptor(report_info, 2, (const uint8_t*)&tb, sizeof(tb));
+  report_count = tuh_hid_parse_report_descriptor_plus(report_info, 2, (const uint8_t*)&tb, sizeof(tb));
   TEST_ASSERT_EQUAL(2, report_count);
-  report_count = tuh_hid_parse_report_descriptor(report_info, 3, (const uint8_t*)&tb, sizeof(tb));
+  report_count = tuh_hid_parse_report_descriptor_plus(report_info, 3, (const uint8_t*)&tb, sizeof(tb));
   TEST_ASSERT_EQUAL(3, report_count);
-  report_count = tuh_hid_parse_report_descriptor(report_info, 4, (const uint8_t*)&tb, sizeof(tb));
+  report_count = tuh_hid_parse_report_descriptor_plus(report_info, 4, (const uint8_t*)&tb, sizeof(tb));
   TEST_ASSERT_EQUAL(4, report_count);
-  report_count = tuh_hid_parse_report_descriptor(report_info, 5, (const uint8_t*)&tb, sizeof(tb));
+  report_count = tuh_hid_parse_report_descriptor_plus(report_info, 5, (const uint8_t*)&tb, sizeof(tb));
   TEST_ASSERT_EQUAL(4, report_count);
   
   TEST_ASSERT_EQUAL(1, report_info[0].usage_page);
@@ -702,7 +700,33 @@ void test_hid_parse_keyboard_and_trackpad_report(void) {
 }
 
 
+int main(void)
+{
+  UNITY_BEGIN();
+ 
+  RUN_TEST(test_next_simple);
+  RUN_TEST(test_usage_with_page);
+  RUN_TEST(test_globals_recorded);
+  RUN_TEST(test_globals_overwritten);
+  RUN_TEST(test_push_pop);
+  RUN_TEST(test_stack_overflow);
+  RUN_TEST(test_stack_underflow);
+  RUN_TEST(test_usage_overflow);
+  RUN_TEST(test_collection_overflow);
+  RUN_TEST(test_collection_underflow);
+  RUN_TEST(test_main_clears_local);
+  RUN_TEST(test_collections);
+  RUN_TEST(test_total_size_bits);
+  RUN_TEST(test_hid_parse_report_descriptor_single_mouse_report);
+  RUN_TEST(test_hid_parse_report_descriptor_single_gamepad_report);
+  RUN_TEST(test_hid_parse_report_descriptor_dual_report);
+  RUN_TEST(test_hid_parse_report_descriptor_joystick_report);
+  RUN_TEST(test_hid_parse_greenasia_report);
+  RUN_TEST(test_hid_parse_speedlink_report);
+  RUN_TEST(test_hid_parse_keyboard_and_trackpad_report);
 
+  return UNITY_END();
+}
 
 
 

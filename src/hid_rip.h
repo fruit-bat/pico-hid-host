@@ -99,7 +99,6 @@ typedef struct
   uint16_t usage;
   uint16_t usage_page;
 
-  // TODO still use the endpoint size for now
   // Note: these currently do not include the Report ID byte
   uint16_t in_len;      // length of IN report in bits
   uint16_t out_len;     // length of OUT report in bits
@@ -145,7 +144,7 @@ uint32_t tuh_hid_rip_report_total_size_bits(tuh_hid_rip_state_t *state);
 // Parse report descriptor into array of report_info struct and return number of reports.
 // For complicated report, application should write its own parser.
 //--------------------------------------------------------------------+
-uint8_t fuh_hid_parse_report_descriptor(tuh_hid_report_info_plus_t* reports_info_arr, uint8_t arr_count, uint8_t const* desc_report, uint16_t desc_len) TU_ATTR_UNUSED;
+uint8_t tuh_hid_parse_report_descriptor_plus(tuh_hid_report_info_plus_t* reports_info_arr, uint8_t arr_count, uint8_t const* desc_report, uint16_t desc_len) TU_ATTR_UNUSED;
 
 #ifdef __cplusplus
 }

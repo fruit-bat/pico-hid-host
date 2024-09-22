@@ -201,7 +201,7 @@ uint32_t tuh_hid_rip_report_total_size_bits(tuh_hid_rip_state_t *state)
 //--------------------------------------------------------------------+
 // Report Descriptor Parser
 //--------------------------------------------------------------------+
-uint8_t fuh_hid_parse_report_descriptor(tuh_hid_report_info_plus_t* report_info_arr, uint8_t arr_count, uint8_t const* desc_report, uint16_t desc_len) 
+uint8_t tuh_hid_parse_report_descriptor_plus(tuh_hid_report_info_plus_t* report_info_arr, uint8_t arr_count, uint8_t const* desc_report, uint16_t desc_len) 
 {
   // Prepare the summary array
   tu_memclr(report_info_arr, arr_count*sizeof(tuh_hid_report_info_plus_t));
