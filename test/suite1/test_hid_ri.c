@@ -26,7 +26,6 @@
 #include "unity.h"
 
 #include "hid_ri.h"
-TEST_FILE("hid_ri.c")
 
 void setUp(void)
 {
@@ -150,7 +149,8 @@ void test_logical_min_neg_2147483647(void)
   TEST_ASSERT_EQUAL(5, tuh_hid_ri_size(tb, 5));
 }
 
-void test_split_usage(void) {
+void test_split_usage(void)
+{
   uint16_t usage;
   uint16_t usage_page;
   
@@ -160,4 +160,20 @@ void test_split_usage(void) {
   TEST_ASSERT_EQUAL(0xFA23, usage_page);
 }
 
+int main(void)
+{
+  UNITY_BEGIN();
+ 
+  RUN_TEST(test_short_item_length);
+  RUN_TEST(test_short_item_size_check);
+  RUN_TEST(test_long_item);
+  RUN_TEST(test_long_item_size_check);
+  RUN_TEST(test_physical_max_315);
+  RUN_TEST(test_physical_max_123);
+  RUN_TEST(test_logical_min_neg_127);
+  RUN_TEST(test_logical_min_neg_32768);
+  RUN_TEST(test_logical_min_neg_2147483647);
+  RUN_TEST(test_split_usage);
 
+  return UNITY_END();
+}

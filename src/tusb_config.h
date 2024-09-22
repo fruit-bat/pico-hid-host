@@ -118,7 +118,10 @@
 // bit rate = 115200, 1 stop bit, no parity, 8 bit data width
 #define CFG_TUH_CDC_LINE_CODING_ON_ENUM   { 115200, CDC_LINE_CONDING_STOP_BITS_1, CDC_LINE_CODING_PARITY_NONE, 8 }
 
+// TODO Remove...
+#ifndef __not_in_flash_func
 #define __not_in_flash_func(X) X
+#endif
 
 #ifdef __cplusplus
  }

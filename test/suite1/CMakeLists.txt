@@ -1,17 +1,20 @@
-
-
-
-add_executable(hid_host_utils_tests
-    test_hid_host_utils.c
+foreach(target
+    hid_host_utils
+    hid_ri
 )
+    add_executable(${target}_tests
+    ${PICO_PROJECT_FOLDER}/src/hid_host_utils.c
+    ${PICO_PROJECT_FOLDER}/src/hid_ri.c
+    test_${target}.c    
+    )
 
-target_compile_definitions(hid_host_utils_tests PRIVATE
-    CFG_TUSB_MCU rp2040
-)
+    target_compile_definitions(${target}_tests PRIVATE
+        CFG_TUSB_MCU rp2040
+    )
 
-target_link_libraries(hid_host_utils_tests
-    pico_hid_host
-    Unity
-)
+    target_link_libraries(${target}_tests
+        Unity
+    )
 
-add_test(suite_1_test hid_host_utils_tests)
+    add_test(${target}_suite ${target}_tests)
+endforeach()

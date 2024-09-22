@@ -50,12 +50,12 @@
 
 #define MAX_REPORT  4
 
-void process_kbd_report(hid_keyboard_report_t const *report, hid_keyboard_report_t const *prev_report);
-void process_kbd_mount(uint8_t dev_addr, uint8_t instance);
-void process_kbd_unmount(uint8_t dev_addr, uint8_t instance);
-void process_mouse_mount(uint8_t dev_addr, uint8_t instance);
-void process_mouse_unmount(uint8_t dev_addr, uint8_t instance);
-void process_mouse_report(hid_mouse_report_t const * report);
+TU_ATTR_WEAK void process_kbd_report(hid_keyboard_report_t const *report, hid_keyboard_report_t const *prev_report) {}
+TU_ATTR_WEAK void process_kbd_mount(uint8_t dev_addr, uint8_t instance) {}
+TU_ATTR_WEAK void process_kbd_unmount(uint8_t dev_addr, uint8_t instance) {}
+TU_ATTR_WEAK void process_mouse_mount(uint8_t dev_addr, uint8_t instance) {}
+TU_ATTR_WEAK void process_mouse_unmount(uint8_t dev_addr, uint8_t instance) {}
+TU_ATTR_WEAK void process_mouse_report(hid_mouse_report_t const * report) {}
 
 static void process_generic_report(uint8_t dev_addr, uint8_t instance, uint8_t const* report, uint16_t len);
 //--------------------------------------------------------------------+

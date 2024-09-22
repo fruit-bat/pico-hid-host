@@ -21,13 +21,9 @@
  *
  * This file is part of the TinyUSB stack.
  */
-
-
 #include "unity.h"
 
-// Files to test
 #include "hid_host_utils.h"
-// TEST_FILE("hid_host_utils.c")
 
 void setUp(void)
 {
@@ -99,6 +95,10 @@ int main(void)
   UNITY_BEGIN();
  
   RUN_TEST(test_tuh_hid_report_bits_u32);
- 
+  RUN_TEST(test_tuh_hid_report_bits_i32);
+  RUN_TEST(test_tuh_hid_report_bytes_u32);
+  RUN_TEST(test_tuh_hid_report_bytes_i32);
+  RUN_TEST(test_tuh_hid_report_i32);
+
   return UNITY_END();
 }
