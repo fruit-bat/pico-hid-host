@@ -25,3 +25,7 @@ foreach(target
 
     add_test(${target}_suite ${target}_tests)
 endforeach()
+
+add_executable(all_tests
+    all.c
+)
