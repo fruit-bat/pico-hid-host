@@ -58,6 +58,8 @@ void tuh_hid_process_simple_axis(
   simple_axis->logical_max = jdata->logical_max;
 }
 /*
+TODO note sure what this is about but it probably needs putting somewhere else...
+
 void tuh_hid_process_simple_axis(
   tuh_hid_simple_input_data_t* jdata,
   uint32_t bitpos,
