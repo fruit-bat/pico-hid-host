@@ -30,13 +30,11 @@
 #include "bsp/board_api.h"
 #include "tusb.h"
 #include "tusb_config.h"
+#include "hid_host_joy.h"
 
 //--------------------------------------------------------------------+
 // MACRO CONSTANT TYPEDEF PROTYPES
 //--------------------------------------------------------------------+
-void led_blinking_task(void);
-extern void cdc_app_task(void);
-extern void hid_app_task(void);
 
 #if CFG_TUH_ENABLED && CFG_TUH_MAX3421
 // API to read/rite MAX3421's register. Implemented by TinyUSB
@@ -44,11 +42,29 @@ extern uint8_t tuh_max3421_reg_read(uint8_t rhport, uint8_t reg, bool in_isr);
 extern bool tuh_max3421_reg_write(uint8_t rhport, uint8_t reg, uint8_t data, bool in_isr);
 #endif
 
+//--------------------------------------------------------------------+
+// Blinking Task
+//--------------------------------------------------------------------+
+bool led_blinking_task(void) {
+  const uint32_t interval_ms = 300;
+  static uint32_t start_ms = 0;
+
+  static bool led_state = false;
+
+  // Blink every interval ms
+  if (board_millis() - start_ms < interval_ms) return false; // not enough time
+  start_ms += interval_ms;
+
+  board_led_write(led_state);
+  led_state = 1 - led_state; // toggle
+  return true;
+}
+
 /*------------- MAIN -------------*/
 int main(void) {
   board_init();
 
-  printf("TinyUSB Host CDC MSC HID Example\r\n");
+  printf("TinyUSB Host HID joystick/mouse/keyboard Example\r\n");
 
   // init host stack on configured roothub port
   tuh_init(BOARD_TUH_RHPORT);
@@ -62,24 +78,31 @@ int main(void) {
   enum { IOPINS1_ADDR  = 20u << 3, /* 0xA0 */ };
   tuh_max3421_reg_write(BOARD_TUH_RHPORT, IOPINS1_ADDR, 0x01, false);
 #endif
-
+  tusb_hid_simple_joystick_t* simple_joysticks[2];
   while (1) {
     // tinyusb host task
     tuh_task();
 
-    led_blinking_task();
+    if (led_blinking_task()) {
+      int n = tuh_hid_get_simple_joysticks(simple_joysticks, 2);
+      for (int j = 0; j < n; ++j) {
+        tusb_hid_simple_joystick_t* joystick = simple_joysticks[0];
+        tusb_hid_print_simple_joystick_report(joystick);
+      }
+    }
   }
 }
 
 //--------------------------------------------------------------------+
-// TinyUSB Callbacks
+// Callbacks
 //--------------------------------------------------------------------+
 
 void process_kbd_mount(uint8_t dev_addr, uint8_t instance) {
-
+  printf("Keyboard connected %d %d\n", dev_addr, instance);
 }
 
 void process_kbd_unmount(uint8_t dev_addr, uint8_t instance) {
+  printf("Keyboard disonnected %d %d\n", dev_addr, instance);
 
 }
 
@@ -121,19 +144,6 @@ void __not_in_flash_func(process_mouse_report)(hid_mouse_report_t const * report
   printf("(%d %d %d %d)\r\n", report->x, report->y, report->wheel, report->pan);
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 void tuh_mount_cb(uint8_t dev_addr) {
   // application set-up
   printf("A device with address %d is mounted\r\n", dev_addr);
@@ -145,19 +155,3 @@ void tuh_umount_cb(uint8_t dev_addr) {
 }
 
 
-//--------------------------------------------------------------------+
-// Blinking Task
-//--------------------------------------------------------------------+
-void led_blinking_task(void) {
-  const uint32_t interval_ms = 1000;
-  static uint32_t start_ms = 0;
-
-  static bool led_state = false;
-
-  // Blink every interval ms
-  if (board_millis() - start_ms < interval_ms) return; // not enough time
-  start_ms += interval_ms;
-
-  board_led_write(led_state);
-  led_state = 1 - led_state; // toggle
-}
