@@ -149,7 +149,7 @@ void handle_gamepad_report(tusb_hid_host_info_t* info, const uint8_t* report, ui
 //--------------------------------------------------------------------+
 
 // Invoked when device with hid interface is mounted
-// Report descriptor is also available for use. tuh_hid_parse_report_descriptor()
+// Report descriptor is also available for use. fuh_hid_parse_report_descriptor()
 // can be used to parse common/simple enough descriptor.
 // Note: if report descriptor length > CFG_TUH_ENUMERATION_BUFSIZE, it will be skipped
 // therefore report_desc = NULL, desc_len = 0
@@ -171,12 +171,12 @@ void tuh_hid_mount_cb(uint8_t dev_addr, uint8_t instance, uint8_t const* desc_re
   // Therefore for this simple example, we only need to parse generic report descriptor (with built-in parser)
   if ( itf_protocol == HID_ITF_PROTOCOL_NONE || itf_protocol == HID_USAGE_DESKTOP_MOUSE)
   {
-    tuh_hid_report_info_t reports[MAX_REPORT];
-    uint8_t report_count = tuh_hid_parse_report_descriptor(reports, MAX_REPORT, desc_report, desc_len);
+    tuh_hid_report_info_plus_t reports[MAX_REPORT];
+    uint8_t report_count = fuh_hid_parse_report_descriptor(reports, MAX_REPORT, desc_report, desc_len);
     printf("HID has %u reports \r\n", report_count);
     
     for (uint8_t i = 0; i < report_count; ++i) {
-      tuh_hid_report_info_t *report = &reports[i];
+      tuh_hid_report_info_plus_t *report = &reports[i];
       bool has_report_id = report_count > 1 || (report[0].report_id > 0);
       
       printf("HID report usage_page=%d, usage=%d, has_report_id=%d dev_addr=%d instance=%d\n", report->usage_page, report->usage, has_report_id, dev_addr, instance);

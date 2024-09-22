@@ -83,6 +83,55 @@ void process_kbd_unmount(uint8_t dev_addr, uint8_t instance) {
 
 }
 
+void print(hid_keyboard_report_t const *report) {
+	printf("HID key report modifiers %2.2X report ", report->modifier);
+	for(int i = 0; i < 6; ++i) printf("%2.2X", report->keycode[i]);
+	printf("\n");
+}
+
+void __not_in_flash_func(process_kbd_report)(hid_keyboard_report_t const *report, hid_keyboard_report_t const *prev_report) {
+  // Some help debugging keyboard input/drivers
+	printf("PREV ");print(prev_report);
+	printf("CURR ");print(report);
+}
+
+void __not_in_flash_func(process_mouse_mount)(uint8_t dev_addr, uint8_t instance) {
+  printf("Mouse connected %d %d\n", dev_addr, instance);
+}
+
+void __not_in_flash_func(process_mouse_unmount)(uint8_t dev_addr, uint8_t instance) {
+  printf("Mouse disonnected %d %d\n", dev_addr, instance);
+}
+
+void __not_in_flash_func(process_mouse_report)(hid_mouse_report_t const * report)
+{
+  static hid_mouse_report_t prev_report = { 0 };
+
+  //------------- button state  -------------//
+  uint8_t button_changed_mask = report->buttons ^ prev_report.buttons;
+  if ( button_changed_mask & report->buttons)
+  {
+    printf(" %c%c%c ",
+       report->buttons & MOUSE_BUTTON_LEFT   ? 'L' : '-',
+       report->buttons & MOUSE_BUTTON_MIDDLE ? 'M' : '-',
+       report->buttons & MOUSE_BUTTON_RIGHT  ? 'R' : '-');
+  }
+
+  //------------- cursor movement -------------//
+  printf("(%d %d %d %d)\r\n", report->x, report->y, report->wheel, report->pan);
+}
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 void tuh_mount_cb(uint8_t dev_addr) {

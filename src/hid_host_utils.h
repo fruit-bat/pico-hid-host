@@ -25,7 +25,7 @@
 #define _TUSB_HID_HOST_UTILS_H_
 
 #include "tusb.h"
-#include "class/hid/hid_rip.h"
+#include "hid_rip.h"
 
 #ifdef __cplusplus
  extern "C" {
