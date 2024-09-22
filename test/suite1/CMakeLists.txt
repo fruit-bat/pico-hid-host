@@ -2,11 +2,15 @@ foreach(target
     hid_host_utils
     hid_ri
     hid_rip
+    hid_host_joy
 )
     add_executable(${target}_tests
         ${PICO_PROJECT_FOLDER}/src/hid_host_utils.c
         ${PICO_PROJECT_FOLDER}/src/hid_ri.c
         ${PICO_PROJECT_FOLDER}/src/hid_rip.c
+        ${PICO_PROJECT_FOLDER}/src/hid_host_common.c
+        ${PICO_PROJECT_FOLDER}/src/hid_host_joy.c
+        stuff.c
         test_${target}.c    
     )
 
