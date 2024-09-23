@@ -28,7 +28,7 @@
 #include <string.h>
 
 #include "bsp/board_api.h"
-#include "tusb.h"
+#include "hid_app.h"
 #include "tusb_config.h"
 #include "hid_host_joy.h"
 
@@ -62,18 +62,10 @@ bool led_blinking_task(void) {
 
 /*------------- MAIN -------------*/
 int main(void) {
-  board_init();
+
+  tuh_hid_app_startup();
 
   printf("TinyUSB Host HID joystick/mouse/keyboard Example\r\n");
-
-  tuh_hid_set_default_protocol(HID_PROTOCOL_REPORT);
-
-  // init host stack on configured roothub port
-  tuh_init(BOARD_TUH_RHPORT);
-
-  if (board_init_after_tusb) {
-    board_init_after_tusb();
-  }
 
 #if CFG_TUH_ENABLED && CFG_TUH_MAX3421
   // FeatherWing MAX3421E use MAX3421E's GPIO0 for VBUS enable

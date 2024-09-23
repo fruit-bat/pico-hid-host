@@ -23,12 +23,26 @@
  *
  */
 
+#include "hid_app.h"
 #include "bsp/board.h"
 #include "tusb.h"
 #include "hid_host_joy.h"
 #include "hid_host_mouse.h"
 #include "hid_host_info.h"
 #include "xinput_host.h"
+
+void tuh_hid_app_startup() {
+  board_init();
+
+  tuh_hid_set_default_protocol(HID_PROTOCOL_REPORT);
+
+  // init host stack on configured roothub port
+  tuh_init(BOARD_TUH_RHPORT);
+
+  if (board_init_after_tusb) {
+    board_init_after_tusb();
+  }
+}
 
 #define BIT0 0x01
 #define BIT1 0x02
