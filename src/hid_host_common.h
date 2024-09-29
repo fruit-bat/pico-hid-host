@@ -22,7 +22,7 @@ typedef union TU_ATTR_PACKED
       bool nonull_null         : 1;
   };
 } tusb_hid_ri_intput_flags_t;
-  
+
 typedef struct {
   union TU_ATTR_PACKED
   {
@@ -36,6 +36,8 @@ typedef struct {
   uint16_t length;
   int32_t logical_min;
   int32_t logical_max;
+  int32_t threshold_min;
+  int32_t threshold_max;
 } tusb_hid_simple_axis_t;
 
 typedef struct {
@@ -45,7 +47,7 @@ typedef struct {
 
 // Intermediate data structure used while parsing joystick HID report descriptors
 typedef struct {
-  uint32_t report_size; 
+  uint32_t report_size;
   uint32_t report_count;
   int32_t logical_min;
   int32_t logical_max;
