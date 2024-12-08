@@ -15,3 +15,5 @@ target_sources(pico_hid_host INTERFACE
 target_include_directories(pico_hid_host INTERFACE
     src
 )
+
+add_compile_definitions(HID_PROTOCOL_DEFAULT=HID_PROTOCOL_REPORT)
