@@ -209,6 +209,7 @@ uint8_t tuh_hid_parse_report_descriptor_plus(tuh_hid_report_info_plus_t* report_
   uint8_t report_num = 0;
   uint16_t usage = 0;
   uint16_t usage_page = 0;
+  bool report_id_seen = false;
   
   tuh_hid_report_info_plus_t* info = report_info_arr;
   tuh_hid_rip_state_t pstate;
@@ -224,7 +225,7 @@ uint8_t tuh_hid_parse_report_descriptor_plus(tuh_hid_report_info_plus_t* report_
         if (report_num >= arr_count) {
           TU_LOG1("HID report description contains more than the maximum %d reports\r\n", arr_count);
           return report_num;
-        }        
+        }
         info->in_len += (uint16_t)tuh_hid_rip_report_total_size_bits(&pstate);
         info->usage = usage;
         info->usage_page = usage_page;
@@ -234,7 +235,11 @@ uint8_t tuh_hid_parse_report_descriptor_plus(tuh_hid_report_info_plus_t* report_
         if (report_num >= arr_count) {
           TU_LOG1("HID report description contains more than the maximum %d reports\r\n", arr_count);
           return report_num;
-        }        
+        }
+        if (!report_id_seen && info->report_id == 0) {
+          info->report_id = 1;
+          report_id_seen = true;
+        }
         info->out_len += (uint16_t)tuh_hid_rip_report_total_size_bits(&pstate);
         info->usage = usage;
         info->usage_page = usage_page;
@@ -250,6 +255,7 @@ uint8_t tuh_hid_parse_report_descriptor_plus(tuh_hid_report_info_plus_t* report_
           report_num++;
         }
         info->report_id = tuh_hid_ri_short_udata8(ri);
+        report_id_seen = true;
         break;
       }
       case HID_RI_TYPE_AND_TAG(RI_TYPE_LOCAL, RI_LOCAL_USAGE): {

@@ -7,6 +7,11 @@ add_compile_options(-Wall)
 get_filename_component(PICO_FOLDER ${CMAKE_CURRENT_LIST_DIR}/../.. ABSOLUTE)
 get_filename_component(PICO_PROJECT_FOLDER ${CMAKE_CURRENT_LIST_DIR}/../ ABSOLUTE)
 
+set(PICO_SDK_FOLDER "${PICO_FOLDER}/pico/pico-sdk")
+if(NOT EXISTS "${PICO_SDK_FOLDER}")
+  set(PICO_SDK_FOLDER "${PICO_FOLDER}/pico-sdk")
+endif()
+
 set(TINYUSB_TARGET tusb)
 set(CFG_TUSB_MCU x86)
 
@@ -21,9 +26,9 @@ add_library(Unity STATIC
 
 target_include_directories(Unity PUBLIC
   ${PICO_FOLDER}/Unity/src
-  ${PICO_FOLDER}/pico-sdk/lib/tinyusb/src
-  ${PICO_FOLDER}/pico-sdk/src/rp2_common/tinyusb/include/
-  ${PICO_FOLDER}/pico-sdk/lib/tinyusb/hw/
+  ${PICO_SDK_FOLDER}/lib/tinyusb/src
+  ${PICO_SDK_FOLDER}/src/rp2_common/tinyusb/include/
+  ${PICO_SDK_FOLDER}/lib/tinyusb/hw/
   ${PICO_PROJECT_FOLDER}/src
 )
 
