@@ -771,30 +771,11 @@ void test_hid_parse_unknown_1_report(void) {
   report_count = tuh_hid_parse_report_descriptor_plus(report_info, 2, (const uint8_t*)&tb, sizeof(tb));
   TEST_ASSERT_EQUAL(1, report_count);
 
-
   TEST_ASSERT_EQUAL(1, report_info[0].usage_page);
   TEST_ASSERT_EQUAL(5, report_info[0].usage);
   TEST_ASSERT_EQUAL(1, report_info[0].report_id);
-  // TEST_ASSERT_EQUAL(56, report_info[0].in_len);
-  // TEST_ASSERT_EQUAL(0, report_info[0].out_len);
-  
-  // TEST_ASSERT_EQUAL(0xC, report_info[1].usage_page);
-  // TEST_ASSERT_EQUAL(0x1, report_info[1].usage);
-  // TEST_ASSERT_EQUAL(3, report_info[1].report_id);
-  // TEST_ASSERT_EQUAL(32, report_info[1].in_len);
-  // TEST_ASSERT_EQUAL(0, report_info[1].out_len);
-  
-  // TEST_ASSERT_EQUAL(1, report_info[2].usage_page);
-  // TEST_ASSERT_EQUAL(0x80, report_info[2].usage);
-  // TEST_ASSERT_EQUAL(4, report_info[2].report_id);
-  // TEST_ASSERT_EQUAL(8, report_info[2].in_len);
-  // TEST_ASSERT_EQUAL(0, report_info[2].out_len);
-  
-  // TEST_ASSERT_EQUAL(0xFFBC, report_info[3].usage_page);
-  // TEST_ASSERT_EQUAL(0x88, report_info[3].usage);
-  // TEST_ASSERT_EQUAL(8, report_info[3].report_id);
-  // TEST_ASSERT_EQUAL(8, report_info[3].in_len);
-  // TEST_ASSERT_EQUAL(0, report_info[3].out_len);
+  TEST_ASSERT_EQUAL(72, report_info[0].in_len);
+  TEST_ASSERT_EQUAL(32, report_info[0].out_len);
 }
 
 int main(void)
