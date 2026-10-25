@@ -80,6 +80,9 @@ void tuh_hid_process_simple_axis(
   tusb_hid_simple_axis_t* simple_axis
 );
 
+// Length in bytes of a report ending after the given input item, saturated at 255
+uint8_t tuh_hid_report_length_bytes(uint32_t bitpos, uint32_t report_size, uint32_t report_count);
+
 #ifdef __cplusplus
 }
 #endif

@@ -76,9 +76,10 @@ static void process_generic_report(uint8_t dev_addr, uint8_t instance, uint8_t c
 // HID Keyboard
 //--------------------------------------------------------------------+
 
+static hid_keyboard_report_t prev_report = { 0, 0, {0} }; // previous report to check key released
+
 static void __not_in_flash_func(_process_kbd_report)(hid_keyboard_report_t const *report)
 {
-  static hid_keyboard_report_t prev_report = { 0, 0, {0} }; // previous report to check key released
   process_kbd_report(report, &prev_report);
   prev_report = *report;
 }
@@ -86,11 +87,16 @@ static void __not_in_flash_func(_process_kbd_report)(hid_keyboard_report_t const
 void __not_in_flash_func(handle_kbd_report)(tusb_hid_host_info_t* info, const uint8_t* report, uint8_t report_length, uint8_t report_id)
 {
   TU_LOG1("HID receive keyboard report\r\n");
-  _process_kbd_report((hid_keyboard_report_t*)report);
+  // Copy into a zeroed report so a short report never reads past the received data
+  hid_keyboard_report_t kbd_report = { 0, 0, {0} };
+  memcpy(&kbd_report, report, report_length < sizeof(kbd_report) ? report_length : sizeof(kbd_report));
+  _process_kbd_report(&kbd_report);
 }
 
 void handle_keyboard_unmount(tusb_hid_host_info_t* info) {
   TU_LOG1("HID keyboard unmount\n");
+  // Forget any keys held on the departing keyboard
+  memset(&prev_report, 0, sizeof(prev_report));
   // Free up keybouard definitions
   process_kbd_unmount(info->key.elements.dev_addr, info->key.elements.instance);
 }
@@ -179,7 +185,7 @@ void tuh_hid_mount_cb(uint8_t dev_addr, uint8_t instance, uint8_t const* desc_re
   const char* protocol_str[] = { "None", "Keyboard", "Mouse" };
   uint8_t const itf_protocol = tuh_hid_interface_protocol(dev_addr, instance);
 
-  printf("HID Interface Protocol = %s\r\n", protocol_str[itf_protocol]);
+  printf("HID Interface Protocol = %s\r\n", itf_protocol < TU_ARRAY_SIZE(protocol_str) ? protocol_str[itf_protocol] : "Unknown");
 
   // By default host stack will use activate boot protocol on supported interface.
   // Therefore for this simple example, we only need to parse generic report descriptor (with built-in parser)
@@ -305,6 +311,7 @@ static void __not_in_flash_func(process_generic_report)(uint8_t dev_addr, uint8_
   uint8_t rpt_id = 0;
 
   if (info->has_report_id) {
+    if (len == 0) return;
     rpt_id = report[0];
     report++;
     len--;       
