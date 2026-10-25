@@ -596,6 +596,50 @@ void test_retroflag_joystick(void) {
   TEST_ASSERT_EQUAL(10, simple_joystick->buttons.length);
 }
 
+void test_joystick_hostile_descriptor(void) {
+  const uint8_t tb[] = {
+    0x05, 0x01,        // Usage Page (Generic Desktop Ctrls)
+    0x09, 0x04,        // Usage (Joystick)
+    0xA1, 0x01,        // Collection (Application)
+    0x15, 0x00,        //   Logical Minimum (0)
+    0x26, 0xFF, 0x00,  //   Logical Maximum (255)
+    0x75, 0x40,        //   Report Size (64)
+    0x95, 0x01,        //   Report Count (1)
+    0x09, 0x30,        //   Usage (X)
+    0x81, 0x02,        //   Input (Data,Var,Abs)
+    0x75, 0x08,        //   Report Size (8)
+    0x96, 0x2C, 0x01,  //   Report Count (300)
+    0x09, 0x31,        //   Usage (Y)
+    0x81, 0x02,        //   Input (Data,Var,Abs)
+    0x19, 0x30,        //   Usage Minimum (X)
+    0x29, 0x31,        //   Usage Maximum (Y)
+    0x95, 0x02,        //   Report Count (2)
+    0x81, 0x02,        //   Input (Data,Var,Abs)
+    0x05, 0x09,        //   Usage Page (Button)
+    0x19, 0x01,        //   Usage Minimum (0x01)
+    0x29, 0x28,        //   Usage Maximum (0x28)
+    0x75, 0x01,        //   Report Size (1)
+    0x95, 0x28,        //   Report Count (40)
+    0x81, 0x02,        //   Input (Data,Var,Abs)
+    0xC0,              // End Collection
+  };
+  // Must terminate (report count > 255) and must not index usages[-1]
+  tuh_hid_joystick_parse_report_descriptor(tb, sizeof(tb), 5, 9);
+  tusb_hid_simple_joystick_t* simple_joystick = tuh_hid_get_simple_joystick(5, 9, 0);
+  TEST_ASSERT_NOT_NULL(simple_joystick);
+  // 64 bit axis is not supported, so it is disabled
+  TEST_ASSERT_EQUAL(0, simple_joystick->axis_x1.length);
+  // Buttons are clamped to 32 bits
+  TEST_ASSERT_EQUAL(32, simple_joystick->buttons.length);
+  // Report is far bigger than a byte can count, so the length saturates
+  TEST_ASSERT_EQUAL(255, simple_joystick->report_length);
+
+  // A short report is rejected rather than read beyond its end
+  uint8_t report[8] = {0};
+  tusb_hid_simple_joystick_process_report(simple_joystick, report, sizeof(report));
+  TEST_ASSERT_FALSE(simple_joystick->has_values);
+}
+
 // TODO Test with report ID
 // anyone got a joystick that reports with an ID?
 
@@ -614,6 +658,7 @@ int main(void)
   RUN_TEST(test_apple_joystick);
   RUN_TEST(test_get_simple_joysticks);
   RUN_TEST(test_retroflag_joystick);
+  RUN_TEST(test_joystick_hostile_descriptor);
 
 
   return UNITY_END();

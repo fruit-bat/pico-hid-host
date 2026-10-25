@@ -48,13 +48,20 @@ bool tuh_hid_get_simple_input_data(
   return true;
 }
 
+uint8_t tuh_hid_report_length_bytes(uint32_t bitpos, uint32_t report_size, uint32_t report_count)
+{
+  const uint64_t bytes = ((uint64_t)bitpos + (uint64_t)report_size * report_count + 7) >> 3;
+  return bytes > 255 ? 255 : (uint8_t)bytes;
+}
+
 void tuh_hid_process_simple_axis(
   tuh_hid_simple_input_data_t* jdata,
   uint32_t bitpos,
   tusb_hid_simple_axis_t* simple_axis)
 {
   simple_axis->start = (uint16_t)bitpos;
-  simple_axis->length = (uint16_t)jdata->report_size;
+  // Values wider than 32 bits are not supported; a zero length disables the axis
+  simple_axis->length = (uint16_t)(jdata->report_size > 32 ? 0 : jdata->report_size);
   simple_axis->flags.is_signed = jdata->logical_min < 0;
   simple_axis->logical_min = jdata->logical_min;
   simple_axis->logical_max = jdata->logical_max;

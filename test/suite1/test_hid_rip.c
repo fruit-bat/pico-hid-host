@@ -23,6 +23,7 @@
  */
 
 
+#include <string.h>
 #include "unity.h"
 
 // Files to test
@@ -778,6 +779,35 @@ void test_hid_parse_unknown_1_report(void) {
   TEST_ASSERT_EQUAL(32, report_info[0].out_len);
 }
 
+void test_hid_parse_report_descriptor_too_many_report_ids(void) {
+  const uint8_t  tb[] = { 
+    0x09, 0x01,        // Usage (Consumer Control)
+    0xA1, 0x01,        // Collection (Application)
+    0x75, 0x08,        //   Report Size (8)
+    0x95, 0x01,        //   Report Count (1)
+    0x85, 0x01,        //   Report ID (1)
+    0x81, 0x02,        //   Input (Data,Var,Abs)
+    0x85, 0x02,        //   Report ID (2)
+    0x81, 0x02,        //   Input (Data,Var,Abs)
+    0x85, 0x03,        //   Report ID (3)
+    0x81, 0x02,        //   Input (Data,Var,Abs)
+    0x85, 0x04,        //   Report ID (4)
+    0x81, 0x02,        //   Input (Data,Var,Abs)
+    0x85, 0x05,        //   Report ID (5)
+    0xB1, 0x02,        //   Feature (Data,Var,Abs)
+    0xC0,              // End Collection
+  };
+  
+  // One extra element to detect a write past the 4 we hand to the parser
+  tuh_hid_report_info_plus_t report_info[5];
+  memset(&report_info[4], 0xAA, sizeof(report_info[4]));
+
+  uint8_t report_count = tuh_hid_parse_report_descriptor_plus(report_info, 4, (const uint8_t*)&tb, sizeof(tb));
+  TEST_ASSERT_EQUAL(4, report_count);
+  TEST_ASSERT_EQUAL(4, report_info[3].report_id);
+  TEST_ASSERT_EQUAL(0xAA, report_info[4].report_id);
+}
+
 int main(void)
 {
   UNITY_BEGIN();
@@ -803,6 +833,7 @@ int main(void)
   RUN_TEST(test_hid_parse_speedlink_report);
   RUN_TEST(test_hid_parse_keyboard_and_trackpad_report);
   RUN_TEST(test_hid_parse_unknown_1_report);
+  RUN_TEST(test_hid_parse_report_descriptor_too_many_report_ids);
 
   return UNITY_END();
 }

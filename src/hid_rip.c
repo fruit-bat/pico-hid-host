@@ -246,11 +246,11 @@ uint8_t tuh_hid_parse_report_descriptor_plus(tuh_hid_report_info_plus_t* report_
         break;
       }
       case HID_RI_TYPE_AND_TAG(RI_TYPE_GLOBAL, RI_GLOBAL_REPORT_ID): {
-        if (report_num >= arr_count) {
-          TU_LOG1("HID report description contains more than the maximum %d reports\r\n", arr_count);
-          return report_num;
-        }
         if (info->report_id > 0 || info->in_len > 0 || info->out_len > 0) {
+          if (report_num + 1 >= arr_count) {
+            TU_LOG1("HID report description contains more than the maximum %d reports\r\n", arr_count);
+            return report_num + 1;
+          }
           info++;
           report_num++;
         }

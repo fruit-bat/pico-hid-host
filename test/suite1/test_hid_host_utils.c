@@ -24,6 +24,7 @@
 #include "unity.h"
 
 #include "hid_host_utils.h"
+#include "hid_host_common.h"
 
 void setUp(void)
 {
@@ -90,6 +91,25 @@ void test_tuh_hid_report_i32(void) {
   TEST_ASSERT_EQUAL(-7404208, tuh_hid_report_i32(tb, 0, 32, true));   // int32_t 0xff8f0550 == -7404208
 }
 
+void test_tuh_hid_report_bits_bad_length(void) {
+  const uint8_t tb[] = {
+    0x50, 0x05, 0x8f, 0xff, 0x12
+  };
+  TEST_ASSERT_EQUAL(0, tuh_hid_report_bits_u32(tb, 0, 0));
+  TEST_ASSERT_EQUAL(0, tuh_hid_report_bits_u32(tb, 0, 33));
+  TEST_ASSERT_EQUAL(0, tuh_hid_report_bits_i32(tb, 0, 0));
+  TEST_ASSERT_EQUAL(0, tuh_hid_report_bits_i32(tb, 0, 33));
+  TEST_ASSERT_EQUAL(0, tuh_hid_report_i32(tb, 0, 40, false));
+  TEST_ASSERT_EQUAL(0, tuh_hid_report_i32(tb, 0, 40, true));
+}
+
+void test_tuh_hid_report_length_bytes(void) {
+  TEST_ASSERT_EQUAL(1, tuh_hid_report_length_bytes(0, 1, 1));
+  TEST_ASSERT_EQUAL(3, tuh_hid_report_length_bytes(16, 8, 1));
+  TEST_ASSERT_EQUAL(255, tuh_hid_report_length_bytes(0, 8, 300));
+  TEST_ASSERT_EQUAL(255, tuh_hid_report_length_bytes(0xffffffff, 0xffffffff, 0xffffffff));
+}
+
 int main(void)
 {
   UNITY_BEGIN();
@@ -99,6 +119,8 @@ int main(void)
   RUN_TEST(test_tuh_hid_report_bytes_u32);
   RUN_TEST(test_tuh_hid_report_bytes_i32);
   RUN_TEST(test_tuh_hid_report_i32);
+  RUN_TEST(test_tuh_hid_report_bits_bad_length);
+  RUN_TEST(test_tuh_hid_report_length_bytes);
 
   return UNITY_END();
 }

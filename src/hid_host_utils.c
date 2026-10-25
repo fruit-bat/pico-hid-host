@@ -27,6 +27,7 @@
 
 uint32_t tuh_hid_report_bits_u32(uint8_t const* report, uint16_t start, uint16_t length)
 {
+  if (length == 0 || length > 32) return 0;
   const uint16_t bit_offset_start = start & 7;
   const uint16_t l = length + bit_offset_start;
   const uint8_t *p = report + (start >> 3);
@@ -40,6 +41,7 @@ uint32_t tuh_hid_report_bits_u32(uint8_t const* report, uint16_t start, uint16_t
 
 int32_t tuh_hid_report_bits_i32(uint8_t const* report, uint16_t start, uint16_t length)
 {
+  if (length == 0 || length > 32) return 0;
   const uint16_t bit_offset_start = start & 7;
   const uint16_t l = length + bit_offset_start;
   const uint8_t *p = report + (start >> 3);
@@ -83,7 +85,7 @@ int32_t tuh_hid_report_bytes_i32(uint8_t const* report, uint16_t start, uint16_t
 // Helper to get a value from a HID report
 int32_t tuh_hid_report_i32(const uint8_t* report, uint16_t start, uint16_t length, bool is_signed) 
 {
-  if (length == 0) return 0;
+  if (length == 0 || length > 32) return 0;
   if ((start | length) & 7) {
     return is_signed ?
       tuh_hid_report_bits_i32(report, start, length):

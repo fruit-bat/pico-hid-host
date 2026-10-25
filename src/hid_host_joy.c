@@ -117,20 +117,22 @@ void tuh_hid_joystick_process_usages(
     return;
   }
 
-  // Update the report length in bytes
-  simple_joystick->report_length = (uint8_t)((bitpos + (jdata->report_size * jdata->report_count) + 7) >> 3);
+  // Update the report length in bytes (saturates, so oversized reports are rejected rather than wrapping)
+  simple_joystick->report_length = tuh_hid_report_length_bytes(bitpos, jdata->report_size, jdata->report_count);
 
   // Naive, assumes buttons are defined in a range
   if (jdata->usage_is_range) {
     if (jdata->usage_page == HID_USAGE_PAGE_BUTTON) {
       tusb_hid_simple_buttons_t* simple_buttons = &simple_joystick->buttons;
       simple_buttons->start = (uint16_t)bitpos;
-      simple_buttons->length = (uint16_t)jdata->report_count;
+      simple_buttons->length = (uint16_t)(jdata->report_count > 32 ? 32 : jdata->report_count);
       return;
     }
   }
 
-  for (uint8_t i = 0; i < jdata->report_count; ++i) {
+  if (pstate->usage_count == 0) return;
+
+  for (uint32_t i = 0; i < jdata->report_count; ++i) {
     uint32_t eusage = pstate->usages[i < pstate->usage_count ? i : pstate->usage_count - 1];
     switch (eusage) {
       // Seems to be common usage for gamepads.
