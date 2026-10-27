@@ -181,7 +181,7 @@ void tusb_hid_simple_mouse_process_report(tusb_hid_simple_mouse_t* simple_mouse,
   values->w1 = tuh_hid_simple_mouse_get_axis_value(&simple_mouse->axis_w1, report);
   values->buttons = tuh_hid_report_bits_u32(report, simple_mouse->buttons.start, simple_mouse->buttons.length);
   simple_mouse->has_values = true;
-  simple_mouse->updated = board_millis();
+  simple_mouse->updated = tuh_hid_millis();
 
    // tusb_hid_print_simple_mouse_report(simple_mouse);
 }
