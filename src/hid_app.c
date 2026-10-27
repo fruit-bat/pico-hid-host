@@ -30,6 +30,11 @@
 #include "hid_host_mouse.h"
 #include "hid_host_info.h"
 #include "xinput_host.h"
+#include "pico/time.h"
+
+uint32_t tuh_hid_millis(void) {
+  return to_ms_since_boot(get_absolute_time());
+}
 
 void tuh_hid_app_startup() {
   board_init();
@@ -405,7 +410,7 @@ void __not_in_flash_func(tuh_xinput_report_received_cb)(uint8_t dev_addr, uint8_
             if (p->wButtons & XINPUT_GAMEPAD_Y) values->buttons|=BIT3;
            
             joystick->has_values = true;
-            joystick->updated = board_millis();
+            joystick->updated = tuh_hid_millis();
          }
 
         //update_joystate_xinput(p->wButtons, p->sThumbLX, p->sThumbLY, p->sThumbRX, p->sThumbRY, p->bLeftTrigger, p->bRightTrigger);

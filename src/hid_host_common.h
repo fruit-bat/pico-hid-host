@@ -80,6 +80,11 @@ void tuh_hid_process_simple_axis(
   tusb_hid_simple_axis_t* simple_axis
 );
 
+// Milliseconds since boot, used to time stamp reports.
+// Provided by the application (see hid_app.c) so this library does not depend on
+// TinyUSB's board API, which changed from board_millis() to tusb_time_millis_api() in 0.21
+uint32_t tuh_hid_millis(void);
+
 // Length in bytes of a report ending after the given input item, saturated at 255
 uint8_t tuh_hid_report_length_bytes(uint32_t bitpos, uint32_t report_size, uint32_t report_count);
 
